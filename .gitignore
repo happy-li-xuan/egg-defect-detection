@@ -1,0 +1,13 @@
+﻿# Environment config
+.env
+server/.env
+
+# Python virtual environment - DO NOT distribute!
+# Recipients must run setup.ps1 to create their own
+.venv/
+server/venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo

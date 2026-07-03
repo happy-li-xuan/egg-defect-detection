@@ -1,0 +1,15 @@
+ services:
+  - type: web
+    name: egg-defect-detection
+    runtime: python
+    region: singapore
+    plan: free
+    buildCommand: pip install -r server/requirements.txt
+    startCommand: gunicorn server.app:app --bind 0.0.0.0:$PORT --workers 1 --timeout 120
+    envVars:
+      - key: FLASK_DEBUG
+        value: "false"
+      - key: EGG_MODEL_PATH
+        value: server/models/best.pt
+      - key: EGG_CONF
+        value: "0.65"

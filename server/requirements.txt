@@ -1,0 +1,15 @@
+﻿flask>=3.0.0
+flask-cors>=4.0.0
+ultralytics>=8.0.0
+opencv-python-headless>=4.8.0
+pillow>=10.0.0
+numpy>=1.24.0
+python-dotenv>=1.0.0
+
+# matplotlib is brought in by ultralytics.
+# On Python 3.14, there may be no pre-built wheel, requiring VS Build Tools.
+# If installation fails, either:
+#   1. Use Python 3.12 (recommended for best compatibility)
+#   2. Install Microsoft Visual C++ Build Tools: https://visualstudio.microsoft.com/visual-cpp-build-tools/
+
+gunicorn>=22.0.0
