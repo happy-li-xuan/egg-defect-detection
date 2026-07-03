@@ -13,3 +13,4 @@ python-dotenv>=1.0.0
 #   2. Install Microsoft Visual C++ Build Tools: https://visualstudio.microsoft.com/visual-cpp-build-tools/
 
 gunicorn>=22.0.0
+dill>=0.3.9
