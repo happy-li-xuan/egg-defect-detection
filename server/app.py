@@ -80,11 +80,11 @@ def detect():
 
     try:
         if 'file' not in request.files:
-            return jsonify({'success': False, 'error': '请上传图片文�?}), 400
+            return jsonify({'success': False, 'error': 'Please upload an image file'}), 400
 
         file = request.files['file']
         if not file.filename:
-            return jsonify({'success': False, 'error': '文件名为�?}), 400
+            return jsonify({'success': False, 'error': 'The file name is empty'}), 400
 
         conf = float(request.form.get('conf', DEFAULT_CONF))
         image_bytes = file.read()
@@ -115,7 +115,7 @@ def detect():
                 })
 
         level, result_text = level_from_detections(detections)
-        summary = f'共检测到 {len(detections)} 个目�? if detections else '未检测到明显缺损'
+        summary = f'A total of {len(detections)} targets were detected' if detections else 'No obvious defects were detected.'
 
         annotated_b64 = None
         if results and len(results) > 0:
@@ -134,7 +134,7 @@ def detect():
             'model': os.path.basename(MODEL_PATH),
         })
     except Exception as e:
-        return jsonify({'success': False, 'error': f'检测失�? {e}'}), 500
+        return jsonify({'success': False, 'error': f'Test Failed： {e}'}), 500
 
 
 
@@ -144,7 +144,7 @@ def index():
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    print(f'鸡蛋检测服务启�? http://0.0.0.0:{port}')
+    print(f'Egg Testing Service Launched: http://0.0.0.0:{port}')
     print(f'模型路径: {MODEL_PATH}')
     if os.path.isfile(MODEL_PATH):
         get_model()
