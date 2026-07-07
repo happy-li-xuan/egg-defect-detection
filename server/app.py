@@ -13,7 +13,14 @@ import numpy as np
 from flask import Flask, jsonify, request, render_template
 from flask_cors import CORS
 from PIL import Image
+
+# Matplotlib 必须在 ultralytics 之前设置 backend，避免字体缓存问题
+import matplotlib
+matplotlib.use('Agg')
+
 from ultralytics import YOLO
+import logging
+logging.getLogger('ultralytics').setLevel(logging.WARNING)
 
 app = Flask(__name__)
 CORS(app)
@@ -43,7 +50,7 @@ def get_model():
     global model
     if model is None:
         if not os.path.isfile(MODEL_PATH):
-            raise FileNotFoundError(f'Model file not found:  {MODEL_PATH}')
+            raise FileNotFoundError(f'Model file not found: {MODEL_PATH}')
         model = YOLO(MODEL_PATH)
     return model
 
@@ -80,11 +87,11 @@ def detect():
 
     try:
         if 'file' not in request.files:
-            return jsonify({'success': False, 'error': 'Please upload an image file'}), 400
+            return jsonify({'success': False, 'error': '请上传图片文件'}), 400
 
         file = request.files['file']
         if not file.filename:
-            return jsonify({'success': False, 'error': 'The file name is empty'}), 400
+            return jsonify({'success': False, 'error': '文件名为空'}), 400
 
         conf = float(request.form.get('conf', DEFAULT_CONF))
         image_bytes = file.read()
@@ -115,7 +122,7 @@ def detect():
                 })
 
         level, result_text = level_from_detections(detections)
-        summary = f'A total of {len(detections)} targets were detected' if detections else 'No obvious defects were detected.'
+        summary = f'共检测到 {len(detections)} 个目标' if detections else '未检测到明显缺损'
 
         annotated_b64 = None
         if results and len(results) > 0:
@@ -134,8 +141,7 @@ def detect():
             'model': os.path.basename(MODEL_PATH),
         })
     except Exception as e:
-        return jsonify({'success': False, 'error': f'Test Failed： {e}'}), 500
-
+        return jsonify({'success': False, 'error': f'检测失败: {e}'}), 500
 
 
 @app.route('/favicon.ico')
@@ -143,13 +149,15 @@ def favicon():
     svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="50" y="50" dominant-baseline="middle" text-anchor="middle" font-size="60">🥚</text></svg>'
     return svg, 200, {'Content-Type': 'image/svg+xml'}
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
 
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    print(f'Egg Testing Service Launched: http://0.0.0.0:{port}')
+    print(f'鸡蛋检测服务启动 -> http://0.0.0.0:{port}')
     print(f'模型路径: {MODEL_PATH}')
     if os.path.isfile(MODEL_PATH):
         get_model()
@@ -158,6 +166,3 @@ if __name__ == '__main__':
         print('警告: 模型文件不存在，请将 best.pt 放到 server/models/ 目录')
     debug = os.environ.get('FLASK_DEBUG', 'false').lower() in ('true', '1', 'yes')
     app.run(host='0.0.0.0', port=port, debug=debug)
-
-
-
