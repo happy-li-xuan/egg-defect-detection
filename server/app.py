@@ -1,4 +1,4 @@
-import base64
+﻿import base64
 import io
 import os
 try:
@@ -138,6 +138,11 @@ def detect():
 
 
 
+@app.route('/favicon.ico')
+def favicon():
+    svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="50" y="50" dominant-baseline="middle" text-anchor="middle" font-size="60">🥚</text></svg>'
+    return svg, 200, {'Content-Type': 'image/svg+xml'}
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -153,5 +158,6 @@ if __name__ == '__main__':
         print('警告: 模型文件不存在，请将 best.pt 放到 server/models/ 目录')
     debug = os.environ.get('FLASK_DEBUG', 'false').lower() in ('true', '1', 'yes')
     app.run(host='0.0.0.0', port=port, debug=debug)
+
 
 

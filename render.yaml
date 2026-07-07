@@ -1,4 +1,4 @@
- services:
+﻿services:
   - type: web
     name: egg-defect-detection
     runtime: python
@@ -13,3 +13,5 @@
         value: server/models/best.pt
       - key: EGG_CONF
         value: "0.65"
+      - key: YOLO_CONFIG_DIR
+        value: "/tmp/Ultralytics"
